@@ -33,7 +33,7 @@ public class Encoding {
 //    let mergeableRanks: [[UInt8]: Int]
 //    let specialTokens: [String: Int] // TODO: Map to [UInt8]
     
-    private let name: String
+    let name: String
     private let regex: NSRegularExpression // Regex
     private let mergeableRanks: [[UInt8]: Int]
     private let specialTokens: [String: Int]

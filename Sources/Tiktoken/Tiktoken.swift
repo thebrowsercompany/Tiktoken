@@ -6,11 +6,18 @@ public struct Tiktoken {
     
     private init() {}
     
+	 static var cachedEncoders: [String: Encoding] = [:]
+	
     public func getEncoding(_ name: String) async throws -> Encoding? {
+		 if let current = Self.cachedEncoders[name] { return current }
+		 if let encodingName = Model.MODEL_TO_ENCODING[name], let existing = Self.cachedEncoders.values.first(where: { $0.name == encodingName }) { return existing }
+
         guard let vocab = Model.getEncoding(name) else { return nil }
         let encoder = await loadRanks(vocab)
         let regex = try NSRegularExpression(pattern: vocab.pattern)
         let encoding = Encoding(name: name, regex: regex, mergeableRanks: encoder, specialTokens: vocab.specialTokens)
+		 
+		  Self.cachedEncoders[name] = encoding
         return encoding
     }
     
