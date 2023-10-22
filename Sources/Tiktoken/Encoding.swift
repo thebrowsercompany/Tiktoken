@@ -57,7 +57,13 @@ public class Encoding {
         let decoder = mergeableRanks.inverted
         self.coreBpe = .init(encoder: mergeableRanks, decoder: decoder, regexTls: [regex])
     }
-    
+   
+	public func count(value text: String) -> Int {
+		// the standard encoder doesn't count spaces, but OpenAI's does. Sometimes. Going to comment this out, since apparently it's inconsistent.
+		let raw = encode(value: text).count
+		return raw// + text.components(separatedBy: .whitespaces).count - 1
+	}
+	
     public func encode(value: String) -> [Int] {
         coreBpe.encodeOrdinaryNative(text: value)
     }
