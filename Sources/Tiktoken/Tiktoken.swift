@@ -12,7 +12,10 @@ public actor Tiktoken {
 		 if let current = cachedEncoders[name] { return current }
 		 if let encodingName = Model.MODEL_TO_ENCODING[name], let existing = cachedEncoders.values.first(where: { $0.name == encodingName }) { return existing }
 
-        guard let vocab = Model.getEncoding(name) else { return nil }
+        guard let vocab = Model.getEncoding(name) else { 
+			  print("Failed to find vocabulary for \(name)")
+			  return nil
+		  }
         let encoder = await loadRanks(vocab)
         let regex = try NSRegularExpression(pattern: vocab.pattern)
         let encoding = Encoding(name: name, regex: regex, mergeableRanks: encoder, specialTokens: vocab.specialTokens)
