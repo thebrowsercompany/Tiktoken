@@ -17,7 +17,7 @@ enum Model {
     }
 }
 
-private extension Model {
+extension Model {
     static let MODEL_PREFIX_TO_ENCODING: [String: String] = [
         // chat
         "gpt-4o-": "o200k_base",

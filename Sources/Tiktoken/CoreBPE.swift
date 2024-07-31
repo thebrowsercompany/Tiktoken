@@ -150,7 +150,9 @@ private extension CoreBPE {
     
     func bytePairEncode(_ piece: [UInt8], _ ranks: [[UInt8]: Int]) -> [Int] {
         if piece.count == 1 {
-            return [ranks[piece]!]
+			  if let rank = ranks[piece] { return [rank] }
+			  print("Failed to BPEncode \(piece)")
+			  return []
         }
         return bytePairMerge(piece, ranks, completion: { p in
             let chunk = Array(piece[p])

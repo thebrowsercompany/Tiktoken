@@ -1,16 +1,26 @@
 import Foundation
 
-public struct Tiktoken {
+public actor Tiktoken {
     
-    public static let shared: Tiktoken = .init()
+    public static let shared = Tiktoken()
     
     private init() {}
     
+	 var cachedEncoders: [String: Encoding] = [:]
+	
     public func getEncoding(_ name: String) async throws -> Encoding? {
-        guard let vocab = Model.getEncoding(name) else { return nil }
+		 if let current = cachedEncoders[name] { return current }
+		 if let encodingName = Model.MODEL_TO_ENCODING[name], let existing = cachedEncoders.values.first(where: { $0.name == encodingName }) { return existing }
+
+        guard let vocab = Model.getEncoding(name) else { 
+			  print("Failed to find vocabulary for \(name)")
+			  return nil
+		  }
         let encoder = await loadRanks(vocab)
         let regex = try NSRegularExpression(pattern: vocab.pattern)
         let encoding = Encoding(name: name, regex: regex, mergeableRanks: encoder, specialTokens: vocab.specialTokens)
+		 
+		  cachedEncoders[name] = encoding
         return encoding
     }
     
