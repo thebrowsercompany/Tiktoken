@@ -27,4 +27,16 @@ final class TiktokenTests: XCTestCase {
         let output = try XCTUnwrap(encoder?.encode(value: input))
         XCTAssertEqual(output, expected)
     }
+
+func testGivenGPT4oWhenDecodeThenMatch() async throws {
+//        let input = "Esto es un texto 👨🏻‍💻 con emojis diferentes 🍿💃🏼🧜‍ y más texto que no tiene sentido 🛟"
+//        let expected = [99100, 878, 537, 26353, 61138, 101, 100798, 2524, 31446, 119, 406, 166700, 17220, 197348, 123, 31446, 225, 183024, 4103, 100, 250, 2524, 342, 3932, 26353, 661, 860, 10647, 25294, 9552, 249, 253]
+
+        let input = "這個算法真的太棒了"
+        let expected = [65212, 32508, 92149, 52810, 18423, 107602, 4531]
+
+        let encoder = try await sut.getEncoding("gpt-4o")
+        let output = try XCTUnwrap(encoder?.encode(value: input))
+        XCTAssertEqual(output, expected)
+    }
 }

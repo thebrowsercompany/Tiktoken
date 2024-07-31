@@ -77,5 +77,24 @@ public extension Vocab {
               ])
     }
     
-    static var all: [Vocab] = [.gpt2, .r50kBase, .p50kBase, .p50kEdit, .cl100kBase]
+    static var o200kBase: Vocab {
+        let patterns: [String] = [
+          "[^\\r\\n\\p{L}\\p{N}]?[\\p{Lu}\\p{Lt}\\p{Lm}\\p{Lo}\\p{M}]*[\\p{Ll}\\p{Lm}\\p{Lo}\\p{M}]+(?i:'s|'t|'re|'ve|'m|'ll|'d)?",
+          "[^\\r\\n\\p{L}\\p{N}]?[\\p{Lu}\\p{Lt}\\p{Lm}\\p{Lo}\\p{M}]+[\\p{Ll}\\p{Lm}\\p{Lo}\\p{M}]*(?i:'s|'t|'re|'ve|'m|'ll|'d)?",
+          "\\p{N}{1,3}",
+          " ?[^\\s\\p{L}\\p{N}]+[\\r\\n/]*",
+          "\\s*[\\r\\n]+",
+          "\\s+(?!\\S)",
+          "\\s+"
+        ]
+        return .init(name: "o200k_base",
+              url: "https://openaipublic.blob.core.windows.net/encodings/o200k_base.tiktoken",
+              pattern: "\(patterns.joined(separator: "|"))/gu",
+              specialTokens: [
+                "<|endoftext|>": 199999,
+                "<|endofprompt|>": 200018
+              ])
+    }
+
+    static var all: [Vocab] = [.gpt2, .r50kBase, .p50kBase, .p50kEdit, .cl100kBase, .o200kBase]
 }
