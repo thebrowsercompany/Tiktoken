@@ -1,17 +1,23 @@
 import Foundation
 
 public actor Tiktoken {
-
     public static let shared = Tiktoken()
+    private static let cache = NSCache<NSString, Encoding>()
 
     private init() {}
 
-    private var cachedEncoders: [String: Encoding] = [:]
+    @nonisolated
+    public func getCachedEncoding(_ name: String) -> Encoding? {
+        return Self.cache.object(forKey: name as NSString)
+    }
 
     public func getEncoding(_ name: String) async throws -> Encoding? {
-        if let current = cachedEncoders[name] { return current }
+        if let current = Self.cache.object(forKey: name as NSString) {
+            return current
+        }
+
         if let encodingName = Model.MODEL_TO_ENCODING[name],
-            let existing = cachedEncoders.values.first(where: { $0.name == encodingName })
+            let existing = getCachedEncoding(encodingName)
         {
             return existing
         }
@@ -25,12 +31,8 @@ public actor Tiktoken {
         let encoding = Encoding(
             name: name, regex: regex, mergeableRanks: encoder, specialTokens: vocab.specialTokens)
 
-        cachedEncoders[name] = encoding
+        Self.cache.setObject(encoding, forKey: name as NSString)
         return encoding
-    }
-
-    public func getCachedEncoding(_ name: String) -> Encoding? {
-        return cachedEncoders[name]
     }
 }
 
