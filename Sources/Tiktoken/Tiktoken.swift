@@ -6,7 +6,7 @@ public actor Tiktoken {
 
     private init() {}
 
-    private(set) var cachedEncoders: [String: Encoding] = [:]
+    private var cachedEncoders: [String: Encoding] = [:]
 
     public func getEncoding(_ name: String) async throws -> Encoding? {
         if let current = cachedEncoders[name] { return current }
@@ -29,17 +29,9 @@ public actor Tiktoken {
         return encoding
     }
 
-    //    public func getEncoding(for vocab: Vocab) -> Encoding? {
-    //        return nil
-    //    }
-    //
-    //    public func register() {
-    //        // TODO: Register model and Encoding
-    //    }
-    //
-    //    public func clear() {
-    //        // TODO: Clear all cached encoding
-    //    }
+    public func getCachedEncoding(_ name: String) -> Encoding? {
+        return cachedEncoders[name]
+    }
 }
 
 extension Tiktoken {
