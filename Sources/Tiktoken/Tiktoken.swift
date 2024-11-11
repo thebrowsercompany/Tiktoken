@@ -6,8 +6,7 @@ public actor Tiktoken {
 
     private init() {}
 
-    @nonisolated
-    public func getCachedEncoding(_ name: String) -> Encoding? {
+    public nonisolated func getCachedEncoding(_ name: String) -> Encoding? {
         return Self.cache.object(forKey: name as NSString)
     }
 
