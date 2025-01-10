@@ -11,6 +11,12 @@ public actor Tiktoken {
     }
 
     public func getEncoding(_ name: String) async throws -> Encoding? {
+        var name = name
+
+        for ignoredPrefix in Model.IGNORED_PREFIXES where name.hasPrefix(ignoredPrefix) {
+            name = String(name.dropFirst(ignoredPrefix.count))
+        }
+
         if let current = Self.cache.object(forKey: name as NSString) {
             return current
         }

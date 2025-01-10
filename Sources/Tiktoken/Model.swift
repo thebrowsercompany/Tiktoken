@@ -18,6 +18,10 @@ enum Model {
 }
 
 extension Model {
+    static let IGNORED_PREFIXES: [String] = [
+        "ft:"  // Fine-tuned versions of standard models
+    ]
+
     static let MODEL_PREFIX_TO_ENCODING: [String: String] = [
         // chat
         "gpt-4o-": "o200k_base",
