@@ -28,7 +28,6 @@ public actor Tiktoken {
         }
 
         guard let vocab = Model.getEncoding(name) else {
-            print("Failed to find vocabulary for \(name)")
             return nil
         }
         let encoder = await loadRanks(vocab)
